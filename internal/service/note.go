@@ -2,12 +2,17 @@ package service
 
 import (
 	"github.com/oshaw1/SyncScribe/internal/model"
+	"github.com/oshaw1/SyncScribe/internal/repository"
 )
 
-type NoteService struct{}
+type NoteService struct {
+	noteRepository *repository.NoteRepository
+}
 
-func NewNoteService() *NoteService {
-	return &NoteService{}
+func NewNoteService(repo *repository.NoteRepository) *NoteService {
+	return &NoteService{
+		noteRepository: repo,
+	}
 }
 
 func (s *NoteService) CreateNote(note *model.Note) (*model.Note, error) {
