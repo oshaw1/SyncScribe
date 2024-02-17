@@ -40,7 +40,7 @@ func main() {
 	// Setup routes
 	r.POST("/notes", noteHandler.CreateNote)
 	r.GET("/notes/:id", noteHandler.GetNote)
-	r.GET("/notes", noteHandler.GetAllNotes)
+	r.GET("/notes", noteHandler.GetAllNotesBasedOnUserID)
 	r.PUT("/notes/:id", noteHandler.UpdateNote)
 	r.DELETE("/notes/:id", noteHandler.DeleteNote)
 
