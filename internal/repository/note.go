@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
@@ -12,13 +14,35 @@ type NoteRepository struct {
 	tableName string
 }
 
-// Adjust the function signature to expect a DynamoDB client and a table name as string
 func NewNoteRepository(dynamoDBClient *dynamodb.DynamoDB, tableName string) *NoteRepository {
 	return &NoteRepository{
 		db:        dynamoDBClient,
 		tableName: tableName,
 	}
 }
+
+func (r *NoteRepository) Create(note model.Note) error {
+	av, err := dynamodbattribute.MarshalMap(note)
+	if err != nil {
+		fmt.Println("Got error marshalling new note item:", err)
+		return err
+	}
+
+	input := &dynamodb.PutItemInput{
+		Item:      av,
+		TableName: aws.String(r.tableName),
+	}
+
+	_, err = r.db.PutItem(input)
+	if err != nil {
+		fmt.Println("Got error calling PutItem:", err)
+		return err
+	}
+
+	fmt.Println("Successfully added note to DynamoDB table")
+	return nil
+}
+
 func (r *NoteRepository) FindByID(id string) (*model.Note, error) {
 	result, err := r.db.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String("Notes"),
