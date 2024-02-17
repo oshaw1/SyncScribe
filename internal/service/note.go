@@ -11,7 +11,6 @@ type NoteService struct {
 	noteRepository *repository.NoteRepository
 }
 
-// Adjust the NewNoteService function to only require a NoteRepository
 func NewNoteService(noteRepo *repository.NoteRepository) *NoteService {
 	return &NoteService{
 		noteRepository: noteRepo,
@@ -29,7 +28,7 @@ func (s *NoteService) CreateNote() error {
 		UserID:    "1",
 	}
 
-	err := s.noteRepository.Create(note) // This method should be implemented in the repository
+	err := s.noteRepository.Create(note)
 	if err != nil {
 		return err
 	}
@@ -37,10 +36,6 @@ func (s *NoteService) CreateNote() error {
 	return nil
 }
 
-func (s *NoteService) GetNoteByID(id string) (*model.Note, error) {
-	note, err := s.noteRepository.FindByID(id)
-	if err != nil {
-		return nil, err
-	}
-	return note, nil
+func (s *NoteService) DeleteNoteByID(noteID string) error {
+	return s.noteRepository.Delete(noteID)
 }

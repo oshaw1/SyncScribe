@@ -42,30 +42,22 @@ func (r *NoteRepository) Create(note model.Note) error {
 	fmt.Println("Successfully added note to DynamoDB table")
 	return nil
 }
-
-func (r *NoteRepository) FindByID(id string) (*model.Note, error) {
-	result, err := r.db.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String("Notes"),
+func (r *NoteRepository) Delete(noteID string) error {
+	input := &dynamodb.DeleteItemInput{
+		TableName: aws.String(r.tableName),
 		Key: map[string]*dynamodb.AttributeValue{
-			"ID": {
-				S: aws.String(id),
+			"NoteID": {
+				S: aws.String(noteID),
 			},
 		},
-	})
+	}
 
+	_, err := r.db.DeleteItem(input)
 	if err != nil {
-		return nil, err
+		fmt.Printf("Got error calling DeleteItem: %s\n", err)
+		return err
 	}
 
-	if result.Item == nil {
-		return nil, nil
-	}
-
-	var note model.Note
-	err = dynamodbattribute.UnmarshalMap(result.Item, &note)
-	if err != nil {
-		return nil, err
-	}
-
-	return &note, nil
+	fmt.Printf("Successfully deleted note with ID %s from DynamoDB table\n", noteID)
+	return nil
 }
