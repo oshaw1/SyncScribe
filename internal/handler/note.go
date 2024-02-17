@@ -12,12 +12,11 @@ type NoteHandler struct {
 	noteService *service.NoteService
 }
 
-func NewNoteHandler() *NoteHandler {
+func NewNoteHandler(s *service.NoteService) *NoteHandler {
 	return &NoteHandler{
-		noteService: service.NewNoteService(),
+		noteService: s,
 	}
 }
-
 func (h *NoteHandler) CreateNote(c *gin.Context) {
 	var note model.Note
 	if err := c.ShouldBindJSON(&note); err != nil {
@@ -48,4 +47,13 @@ func (h *NoteHandler) GetNote(c *gin.Context) {
 
 	// If the note is found, return it
 	c.JSON(http.StatusOK, note)
+}
+func (h *NoteHandler) GetAllNotes(c *gin.Context) {
+
+}
+func (h *NoteHandler) UpdateNote(c *gin.Context) {
+
+}
+func (h *NoteHandler) DeleteNote(c *gin.Context) {
+
 }

@@ -1,21 +1,47 @@
 package repository
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/oshaw1/SyncScribe/internal/model"
 )
 
-type NoteRepository struct{}
-
-func NewNoteRepository() *NoteRepository {
-	return &NoteRepository{}
+type NoteRepository struct {
+	db        *dynamodb.DynamoDB
+	tableName string
 }
 
-func (r *NoteRepository) Create(note *model.Note) (*model.Note, error) {
-	// Implement database logic here
-	return note, nil
+// Adjust the function signature to expect a DynamoDB client and a table name as string
+func NewNoteRepository(dynamoDBClient *dynamodb.DynamoDB, tableName string) *NoteRepository {
+	return &NoteRepository{
+		db:        dynamoDBClient,
+		tableName: tableName,
+	}
 }
-
 func (r *NoteRepository) FindByID(id string) (*model.Note, error) {
-	// Implementation for fetching a note by ID from the database
-	// This is highly dependent on your database choice and setup
+	result, err := r.db.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String("Notes"),
+		Key: map[string]*dynamodb.AttributeValue{
+			"ID": {
+				S: aws.String(id),
+			},
+		},
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Item == nil {
+		return nil, nil
+	}
+
+	var note model.Note
+	err = dynamodbattribute.UnmarshalMap(result.Item, &note)
+	if err != nil {
+		return nil, err
+	}
+
+	return &note, nil
 }

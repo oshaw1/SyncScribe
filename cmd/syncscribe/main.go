@@ -1,15 +1,41 @@
 package main
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/gin-gonic/gin"
 	"github.com/oshaw1/SyncScribe/internal/handler"
+	"github.com/oshaw1/SyncScribe/internal/repository"
+	"github.com/oshaw1/SyncScribe/internal/service"
+	"github.com/oshaw1/SyncScribe/pkg/config"
 )
 
 func main() {
-	r := gin.Default()
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		panic("failed to load configuration: " + err.Error())
+	}
 
-	// Initialize handlers
-	noteHandler := handler.NewNoteHandler()
+	// Initialize AWS session with region from config
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		Config: aws.Config{
+			Region: aws.String(cfg.AWSRegion),
+		},
+		SharedConfigState: session.SharedConfigEnable,
+	}))
+	dynamoDBClient := dynamodb.New(sess)
+
+	// Initialize repository with DynamoDB client and table name from config
+	noteRepository := repository.NewNoteRepository(dynamoDBClient, cfg.DynamoDBTable)
+
+	// Initialize service with repository
+	noteService := service.NewNoteService(noteRepository)
+
+	// Initialize handlers with service
+	noteHandler := handler.NewNoteHandler(noteService)
+
+	r := gin.Default()
 
 	// Setup routes
 	r.POST("/notes", noteHandler.CreateNote)
@@ -18,6 +44,6 @@ func main() {
 	r.PUT("/notes/:id", noteHandler.UpdateNote)
 	r.DELETE("/notes/:id", noteHandler.DeleteNote)
 
-	// Start server
-	r.Run(":8080") // listen and serve on 0.0.0.0:8080
+	// Start server with port from config
+	r.Run(":" + cfg.ServerPort) // listen and serve on configured port
 }
