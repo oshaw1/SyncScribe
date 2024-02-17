@@ -1,6 +1,8 @@
 package service
 
 import (
+	"time"
+
 	"github.com/oshaw1/SyncScribe/internal/model"
 	"github.com/oshaw1/SyncScribe/internal/repository"
 )
@@ -9,21 +11,33 @@ type NoteService struct {
 	noteRepository *repository.NoteRepository
 }
 
-func NewNoteService(repo *repository.NoteRepository) *NoteService {
+// Adjust the NewNoteService function to only require a NoteRepository
+func NewNoteService(noteRepo *repository.NoteRepository) *NoteService {
 	return &NoteService{
-		noteRepository: repo,
+		noteRepository: noteRepo,
 	}
 }
 
-func (s *NoteService) CreateNote(note *model.Note) (*model.Note, error) {
-	// Here you would call the repository to save the note to the database
-	// For now, we'll just simulate by returning the same note
-	return note, nil
+func (s *NoteService) CreateNote() error {
+	note := model.Note{
+		NoteID:    "2",
+		CreatedAt: time.Now().Format(time.RFC3339),
+		Content:   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		Tags:      []string{},
+		Title:     "TestNote2",
+		UpdatedAt: time.Now().Format(time.RFC3339),
+		UserID:    "1",
+	}
+
+	err := s.noteRepository.Create(note) // This method should be implemented in the repository
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (s *NoteService) GetNoteByID(id string) (*model.Note, error) {
-	// This is where you'd typically interact with the repository to fetch the note
-	// For demonstration, let's assume it returns a dummy note or an error
 	note, err := s.noteRepository.FindByID(id)
 	if err != nil {
 		return nil, err
