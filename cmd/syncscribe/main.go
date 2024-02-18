@@ -45,5 +45,5 @@ func main() {
 	r.DELETE("/notes/DeleteNote/:id", noteHandler.DeleteNote)
 
 	// Start server with port from config
-	r.Run("localhost:" + cfg.ServerPort) // listen and serve on configured port
+	r.Run("0.0.0.0:" + cfg.ServerPort) // listen and serve on configured port
 }
