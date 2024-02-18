@@ -25,5 +25,7 @@ artifacts:
   files:
     - SyncScribeApp
     - Procfile
+    - go.mod
+    - go.sum
     # Specify additional files or directories needed for your deployment
 
