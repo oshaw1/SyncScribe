@@ -18,7 +18,8 @@ phases:
       - go test ./...
   post_build:
     commands:
-      - echo "Post-build steps..."
+      - echo "list directory content to debug"
+      - ls -la
       # Include any commands to package your application for deployment, if necessary
 artifacts:
   files:
