@@ -13,7 +13,7 @@ phases:
   build:
     commands:
       - echo "Building the application..."
-      - go build -o SyncScribe ./...
+      - go build -o SyncScribeApp ./cmd/syncscribe
       - echo "Running tests..."
       - go test ./...
   post_build:
@@ -22,6 +22,6 @@ phases:
       # Include any commands to package your application for deployment, if necessary
 artifacts:
   files:
-    - SyncScribe
+    - SyncScribeApp
     # Specify additional files or directories needed for your deployment
 
