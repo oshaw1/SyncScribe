@@ -23,5 +23,6 @@ phases:
 artifacts:
   files:
     - SyncScribeApp
+    - Procfile
     # Specify additional files or directories needed for your deployment
 
