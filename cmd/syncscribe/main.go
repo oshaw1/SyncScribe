@@ -38,12 +38,12 @@ func main() {
 	r := gin.Default()
 
 	// Setup routes
-	r.POST("/notes", noteHandler.CreateNote)
+	r.POST("/notes/CreateNote", noteHandler.CreateNote)
 	r.GET("/notes/:id", noteHandler.GetNote)
 	r.GET("/notes", noteHandler.GetAllNotesBasedOnUserID)
 	r.PUT("/notes/:id", noteHandler.UpdateNote)
-	r.DELETE("/notes/:id", noteHandler.DeleteNote)
+	r.DELETE("/notes/DeleteNote/:id", noteHandler.DeleteNote)
 
 	// Start server with port from config
-	r.Run(":" + cfg.ServerPort) // listen and serve on configured port
+	r.Run("localhost:" + cfg.ServerPort) // listen and serve on configured port
 }

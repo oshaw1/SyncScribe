@@ -1,7 +1,10 @@
 package config
 
 import (
+	"log"
 	"os"
+
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 // Config represents the application configuration
@@ -26,4 +29,22 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+func getAWSCredentials() (string, string) {
+	sess, err := session.NewSession()
+	if err != nil {
+		log.Fatalf("failed to create session: %v", err)
+	}
+
+	// Get credentials from the session
+	creds, err := sess.Config.Credentials.Get()
+	if err != nil {
+		log.Fatalf("failed to get credentials: %v", err)
+	}
+
+	accessKeyID := creds.AccessKeyID
+	secretAccessKey := creds.SecretAccessKey
+
+	return accessKeyID, secretAccessKey
 }
