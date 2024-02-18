@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      golang: '1.22.0' # Specify the Go version matching your development environment
+      golang: '1.21.0' # Specify the Go version matching your development environment
     commands:
       - echo "Installing dependencies..."
       # Include any other dependency installation
