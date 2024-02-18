@@ -24,16 +24,13 @@ func (h *NoteHandler) CreateNote(c *gin.Context) {
 		return
 	}
 
-	// Call CreateNote without passing the note object, since it's not designed to accept parameters.
-	err := h.noteService.CreateNote()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// Delegate the business logic to the service layer.
+	// Note that we no longer set NoteID, CreatedAt, or UpdatedAt here.
+	if err := h.noteService.CreateNote(&note); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create note"})
 		return
 	}
 
-	// Since CreateNote doesn't return the created note, you can't directly return the created note to the client.
-	// This is a significant limitation of the current design.
-	// You might return a generic success message or the static note details if applicable.
 	c.JSON(http.StatusOK, gin.H{"message": "Note created successfully"})
 }
 

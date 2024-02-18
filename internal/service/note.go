@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/oshaw1/SyncScribe/internal/model"
@@ -17,25 +19,25 @@ func NewNoteService(noteRepo *repository.NoteRepository) *NoteService {
 	}
 }
 
-func (s *NoteService) CreateNote() error {
-	note := model.Note{
-		NoteID:    "2",
-		CreatedAt: time.Now().Format(time.RFC3339),
-		Content:   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-		Tags:      []string{},
-		Title:     "TestNote2",
-		UpdatedAt: time.Now().Format(time.RFC3339),
-		UserID:    "1",
-	}
+func (s *NoteService) CreateNote(note *model.Note) error {
+	// Now the service layer takes responsibility for setting these fields.
+	note.NoteID = generateNoteID()
+	now := time.Now().Format(time.RFC3339)
+	note.CreatedAt = now
+	note.UpdatedAt = now
 
-	err := s.noteRepository.Create(note)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return s.noteRepository.Create(*note)
 }
 
 func (s *NoteService) DeleteNoteByID(noteID string) error {
 	return s.noteRepository.Delete(noteID)
+}
+
+func generateNoteID() string {
+	// Seed the random number generator to ensure different results on each run
+	rand.Seed(time.Now().UnixNano())
+	// Generate a random number in the range [10000, 99999]
+	id := rand.Intn(90000) + 10000
+	// Convert the integer to a string
+	return fmt.Sprintf("%d", id)
 }
