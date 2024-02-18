@@ -1,0 +1,27 @@
+version: 0.0.1
+
+phases:
+  install:
+    runtime-versions:
+      go: '1.22.0' # Specify the Go version matching your development environment
+    commands:
+      - echo "Installing dependencies..."
+      # Include any other dependency installation
+  pre_build:
+    commands:
+      - echo "Pre-build steps..."
+  build:
+    commands:
+      - echo "Building the application..."
+      - go build -o SyncScribe ./...
+      - echo "Running tests..."
+      - go test ./...
+  post_build:
+    commands:
+      - echo "Post-build steps..."
+      # Include any commands to package your application for deployment, if necessary
+artifacts:
+  files:
+    - SyncScribe
+    # Specify additional files or directories needed for your deployment
+
