@@ -8,7 +8,6 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - npm install --prefix frontend
-    commands:
       - echo "Pre-build steps..."
   build:
     commands:
