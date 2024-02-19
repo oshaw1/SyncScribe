@@ -51,6 +51,10 @@ func main() {
 	r.PUT("/notes/:id", noteHandler.UpdateNote)
 	r.DELETE("/notes/DeleteNote/:id", noteHandler.DeleteNote)
 
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "UP"})
+	})
+
 	// Start server with port from config
 	r.Run(":" + cfg.ServerPort) // listen and serve on configured port
 }
