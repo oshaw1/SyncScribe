@@ -3,29 +3,30 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      golang: '1.21' # Specify the Go version matching your development environment
+      golang: '1.21'
+      nodejs: 14
     commands:
       - echo "Installing dependencies..."
-      # Include any other dependency installation
-  pre_build:
+      - npm install --prefix frontend
     commands:
       - echo "Pre-build steps..."
   build:
     commands:
-      - echo "Building the application..."
+      - echo "Building the Go application..."
       - go build -o SyncScribeApp ./cmd/syncscribe
-      - echo "Running tests..."
+      - echo "Running Go tests..."
       - go test ./...
+      - echo "Building the React frontend..."
+      - npm run build --prefix frontend
   post_build:
     commands:
-      - echo "list directory content to debug"
+      - echo "List directory content to debug"
       - ls -la
-      # Include any commands to package your application for deployment, if necessary
 artifacts:
   files:
     - SyncScribeApp
     - Procfile
     - go.mod
     - go.sum
-    # Specify additional files or directories needed for your deployment
+    - frontend/build/**/*
 

@@ -41,6 +41,9 @@ func main() {
 
 	r := gin.Default()
 
+	// Serve frontend static files
+	r.Static("/", "./frontend/build")
+
 	// Setup routes
 	r.POST("/notes/CreateNote", noteHandler.CreateNote)
 	r.GET("/notes/:id", noteHandler.GetNote)
@@ -49,5 +52,5 @@ func main() {
 	r.DELETE("/notes/DeleteNote/:id", noteHandler.DeleteNote)
 
 	// Start server with port from config
-	r.Run("0.0.0.0:" + cfg.ServerPort) // listen and serve on configured port
+	r.Run(":" + cfg.ServerPort) // listen and serve on configured port
 }
