@@ -11,6 +11,7 @@ phases:
       - echo "Pre-build steps..."
   build:
     commands:
+      - mkdir /etc/systemd/system/nginx.service.d
       - echo "Building the Go application..."
       - go build -o SyncScribeApp ./cmd/syncscribe
       - echo "Running Go tests..."
