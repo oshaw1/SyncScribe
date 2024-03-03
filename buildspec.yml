@@ -29,6 +29,7 @@ phases:
       - chmod +x start_app.sh
       - echo "List directory content to debug"
       - ls -la
+      
 artifacts:
   files:
     - SyncScribeApp
