@@ -5,7 +5,6 @@ DynamoDB
 IAM
 CodePipeline
 ElasicBean Environment
-Cloudwatch
 
 ## Building the app artifact locally
 To build the app backend locally:
