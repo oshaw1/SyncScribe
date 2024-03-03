@@ -25,17 +25,15 @@ phases:
 
   post_build:
     commands:
-      - echo "Post-build steps..."
+      - echo "Making start script executable..."
+      - chmod +x start_app.sh
       - echo "List directory content to debug"
       - ls -la
-      - echo "Checking if /var/pids/ directory exists..."
-      - if [ ! -d /var/pids/ ]; then echo "/var/pids/ directory does not exist. Creating it."; mkdir -p /var/pids/; else echo "/var/pids/ directory exists."; fi
-      - echo "Post-build steps completed."
-
 artifacts:
   files:
     - SyncScribeApp
     - Procfile
+    - start_app.sh
     - go.mod
     - go.sum
     - frontend/build/**/*
