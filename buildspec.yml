@@ -38,3 +38,4 @@ artifacts:
     - go.mod
     - go.sum
     - frontend/build/**/*
+    - .ebextensions/**/*
