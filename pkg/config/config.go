@@ -17,8 +17,8 @@ type Config struct {
 // LoadConfig loads configuration from environment variables
 func LoadConfig() (*Config, error) {
 	return &Config{
-		ServerPort:    "5000",                  // Default to 8080 if not set
-		AWSRegion:     os.Getenv("AWS_REGION"), // AWS SDK automatically uses this
+		ServerPort:    getEnv("SERVER_PORT", "5000"), // Default to 8080 if not set
+		AWSRegion:     os.Getenv("AWS_REGION"),       // AWS SDK automatically uses this
 		DynamoDBTable: os.Getenv("DYNAMODB_TABLE"),
 	}, nil
 }
