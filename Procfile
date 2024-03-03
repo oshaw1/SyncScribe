@@ -1,1 +1,1 @@
-web: ./SyncScribeApp
+web: ./start_app.sh
