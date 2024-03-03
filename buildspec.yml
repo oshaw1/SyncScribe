@@ -8,19 +8,30 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - npm install --prefix frontend
+      - echo "Dependencies installed."
       - echo "Pre-build steps..."
+
   build:
     commands:
       - echo "Building the Go application..."
       - go build -o SyncScribeApp ./cmd/syncscribe
+      - echo "Go application built."
       - echo "Running Go tests..."
       - go test ./...
+      - echo "Go tests completed."
       - echo "Building the React frontend..."
       - npm run build --prefix frontend
+      - echo "React frontend built."
+
   post_build:
     commands:
+      - echo "Post-build steps..."
       - echo "List directory content to debug"
       - ls -la
+      - echo "Checking if /var/pids/ directory exists..."
+      - if [ ! -d /var/pids/ ]; then echo "/var/pids/ directory does not exist. Creating it."; mkdir -p /var/pids/; else echo "/var/pids/ directory exists."; fi
+      - echo "Post-build steps completed."
+
 artifacts:
   files:
     - SyncScribeApp
@@ -28,4 +39,3 @@ artifacts:
     - go.mod
     - go.sum
     - frontend/build/**/*
-
