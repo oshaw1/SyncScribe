@@ -30,6 +30,7 @@ phases:
 
 artifacts:
   files:
+    - backend/bin/SyncScribe
     - backend/**/*
     - frontend/**/*
   name: sync-scribe-$(date +%Y-%m-%d)
