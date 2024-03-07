@@ -1,12 +1,15 @@
-package model
+package db
 
-// Note represents the note model
-type Note struct {
-	NoteID    string   `json:"NoteID"`
-	CreatedAt string   `json:"CreatedAt"`
-	Content   string   `json:"Content"`
-	Tags      []string `json:"Tags"`
-	Title     string   `json:"Title"`
-	UpdatedAt string   `json:"UpdatedAt"`
-	UserID    string   `json:"UserID"`
+import (
+    "github.com/aws/aws-sdk-go/aws/session"
+    "github.com/aws/aws-sdk-go/service/dynamodb"
+)
+
+var DB *dynamodb.DynamoDB
+
+func init() {
+    sess := session.Must(session.NewSessionWithOptions(session.Options{
+        SharedConfigState: session.SharedConfigEnable,
+    }))
+    DB = dynamodb.New(sess)
 }
