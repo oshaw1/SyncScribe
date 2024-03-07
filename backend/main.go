@@ -4,7 +4,7 @@ import (
     "log"
     "net/http"
     "os"
-    "SyncScribe/backend/handlers"
+    "github.com/oshaw1/SyncScribe/backend/handlers"
 )
 
 func main() {

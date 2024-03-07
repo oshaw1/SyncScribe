@@ -8,8 +8,8 @@ import (
     "github.com/google/uuid"
     "log"
     "net/http"
-    "SyncScribe/backend/db"
-    "SyncScribe/backend/models"
+    "github.com/oshaw1/SyncScribe/backend/db"
+    "github.com/oshaw1/SyncScribe/backend/models"
     "time"
 )
 
