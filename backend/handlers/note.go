@@ -1,4 +1,4 @@
-package handlers
+package github.com/oshaw1/SyncScribe/backend/handlers
 
 import (
     "encoding/json"
