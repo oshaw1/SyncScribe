@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Serve frontend files
-	frontend := http.FileServer(http.Dir("../staging/frontend"))
+	frontend := http.FileServer(http.Dir("../frontend"))
 	http.Handle("/", frontend)
 
 	// API endpoint
