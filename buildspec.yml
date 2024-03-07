@@ -23,9 +23,8 @@ phases:
       - GOOS=linux GOARCH=amd64 go build -o bin/SyncScribe
   post_build:
     commands:
-      - echo "Copying frontend build to staging directory..."
-      - mkdir -p staging/frontend
-      - cp -r frontend/build/* ./frontend/
+      - echo "Copying frontend build to frontend directory..."
+      - cp -r ../frontend/build/* ../frontend/
       - echo "Debug Printing directory structure from root..."
       - ls -R
 
