@@ -29,7 +29,7 @@ phases:
       - mkdir -p ../bin
       - cp bin/SyncScribe ../bin/
       - echo "Debug Printing directory structure from root..."
-      - ls -R
+      - ls -lR ../
 
 artifacts:
   files:
