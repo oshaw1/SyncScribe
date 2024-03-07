@@ -20,20 +20,17 @@ phases:
       - cd ../frontend
       - npm run build
       - cd ../backend
-      - GOOS=linux GOARCH=amd64 go build -o bin/SyncScribe
+      - GOOS=linux GOARCH=amd64 go build -o SyncScribeApp
   post_build:
     commands:
       - echo "Copying frontend build to frontend directory..."
       - cp -r ../frontend/build/* ../frontend/
-      - echo "Copying Go binary to root bin directory..."
-      - mkdir -p ../bin
-      - cp bin/SyncScribe ../bin/
       - echo "Debug Printing directory structure from root..."
       - ls -lR ../
 
 artifacts:
   files:
-    - bin/SyncScribe
+    - SyncScribeApp
     - backend/**/*
     - frontend/**/*
   name: sync-scribe-$(date +%Y-%m-%d)
