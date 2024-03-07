@@ -5,6 +5,8 @@ phases:
     runtime-versions:
       nodejs: 18
       golang: 1.20
+    commands:
+    - export NODE_OPTIONS=--openssl-legacy-provider
   pre_build:
     commands:
       - echo "Installing dependencies..."
