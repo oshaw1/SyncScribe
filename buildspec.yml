@@ -25,7 +25,11 @@ phases:
     commands:
       - echo "Copying frontend build to backend directory..."
       - cp -r ../frontend/build ./frontend
+      - echo "Debug: Printing directory structure from root..."
+      - ls -R
+
 artifacts:
   files:
-    - backend/**/*
+    - backend/bin/SyncScribe
+    - backend/frontend/**/*
   name: sync-scribe-$(date +%Y-%m-%d)
