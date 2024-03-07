@@ -24,12 +24,12 @@ phases:
   post_build:
     commands:
       - echo "Copying frontend build to staging directory..."
-      - cp -r frontend/build ./staging/frontend
+      - cp -r ../frontend/build ./staging/frontend
       - echo "Debug Printing directory structure from root..."
       - ls -R
 
 artifacts:
   files:
     - backend/bin/SyncScribe
-    - staging/frontend/**/*
+    - backend/frontend/**/*
   name: sync-scribe-$(date +%Y-%m-%d)
