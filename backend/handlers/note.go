@@ -8,8 +8,8 @@ import (
     "github.com/google/uuid"
     "log"
     "net/http"
-    "sync-scribe/db"
-    "sync-scribe/models"
+    "SyncScribe/db"
+    "SyncScribe/models"
     "time"
 )
 
