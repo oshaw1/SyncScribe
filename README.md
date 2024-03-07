@@ -42,8 +42,6 @@ Sync Scribe is released under the [MIT License](LICENSE).
 
 ## Acknowledgements
 
-We would like to express our gratitude to the following technologies and communities that have made Sync Scribe possible:
-
 - [React](https://reactjs.org/)
 - [Go](https://golang.org/)
 - [AWS DynamoDB](https://aws.amazon.com/dynamodb/)
