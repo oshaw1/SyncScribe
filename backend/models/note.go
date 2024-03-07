@@ -1,4 +1,4 @@
-package model
+package models
 
 // Note represents the note model
 type Note struct {
