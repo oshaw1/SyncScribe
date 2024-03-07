@@ -23,13 +23,13 @@ phases:
       - GOOS=linux GOARCH=amd64 go build -o bin/SyncScribe
   post_build:
     commands:
-      - echo "Copying frontend build to backend directory..."
-      - cp -r ../frontend/build ./frontend
+      - echo "Copying frontend build to staging directory..."
+      - cp -r frontend/build ./staging/frontend
       - echo "Debug Printing directory structure from root..."
       - ls -R
 
 artifacts:
   files:
     - backend/bin/SyncScribe
-    - backend/frontend/**/*
+    - staging/frontend/**/*
   name: sync-scribe-$(date +%Y-%m-%d)
