@@ -25,7 +25,7 @@ phases:
     commands:
       - echo "Copying frontend build to backend directory..."
       - cp -r ../frontend/build ./frontend
-      - echo "Debug: Printing directory structure from root..."
+      - echo "Debug Printing directory structure from root..."
       - ls -R
 
 artifacts:
