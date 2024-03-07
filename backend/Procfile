@@ -1,1 +1,1 @@
-web: bin/sync-scribe
+web: bin/SyncScribe
