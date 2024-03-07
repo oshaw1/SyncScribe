@@ -25,12 +25,15 @@ phases:
     commands:
       - echo "Copying frontend build to frontend directory..."
       - cp -r ../frontend/build/* ../frontend/
+      - echo "Copying Go binary to root bin directory..."
+      - mkdir -p ../bin
+      - cp bin/SyncScribe ../bin/
       - echo "Debug Printing directory structure from root..."
       - ls -R
 
 artifacts:
   files:
-    - backend/bin/SyncScribe
+    - bin/SyncScribe
     - backend/**/*
     - frontend/**/*
   name: sync-scribe-$(date +%Y-%m-%d)
