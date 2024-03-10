@@ -3,37 +3,32 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 18
-      golang: 1.20
+      docker: 20
     commands:
-    - export NODE_OPTIONS=--openssl-legacy-provider
+      - pip install yq
   pre_build:
     commands:
-      - echo "Installing dependencies..."
-      - cd frontend
-      - npm install
-      - cd ../backend
-      - go mod download
+      - echo "Logging in to Amazon ECR..."
+      - ACCOUNT_ID=$(yq .aws.account_id aws-config.yml)
+      - REGION=$(yq .aws.region aws-config.yml)
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
   build:
     commands:
-      - echo "Building the application..."
-      - cd ../frontend
-      - npm run build
-      - cd ../backend
-      - GOOS=linux GOARCH=amd64 go build -o bin/SyncScribe
+      - echo "Building Docker images..."
+      - docker build -t syncscribe-backend backend/
+      - docker build -t syncscribe-frontend frontend/
+      - echo "Tagging Docker images..."
+      - docker tag syncscribe-backend:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-backend:latest
+      - docker tag syncscribe-frontend:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-frontend:latest
   post_build:
     commands:
-      - echo "Copying frontend build to frontend directory..."
-      - cp -r ../frontend/build/* ../frontend/
-      - echo "Copying Procfile to the root directory..."
-      - cp Procfile ../
-      - echo "Debug Printing directory structure from root..."
-      - ls -lR ../
+      - echo "Pushing Docker images to Amazon ECR..."
+      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-backend:latest
+      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-frontend:latest
 
 artifacts:
   files:
-    - Procfile
-    - bin/SyncScribe
-    - backend/**/*
-    - frontend/**/*
+    - docker-compose.yml
+    - backend/Dockerfile
+    - frontend/Dockerfile
   name: sync-scribe-$(date +%Y-%m-%d)
