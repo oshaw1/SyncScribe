@@ -7,7 +7,7 @@
 
 .sidebar {
   width: 250px;
-  background-color: #ffffff;
+  background-color: #f1efe6;
   padding: 20px;
 }
 
@@ -21,6 +21,7 @@
   display: flex;
   align-items: center;
   padding: 20px;
+  height: 3%;
   background-color: #f1efe6;
 }
 
@@ -37,5 +38,6 @@
 
 .main-content {
   flex: 1;
-  padding: 20px;
+  padding: 40px;
+  background-color: #eceade;
 }
