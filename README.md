@@ -24,6 +24,9 @@ Sync Scribe is built using the following technologies:
 
 To start using Sync Scribe, simply visit our website at [https://syncscribe.com](https://syncscribe.com) and create an account. Once you're logged in, you can begin creating, editing, and collaborating on notes instantly.
 
+To launch the app locally move backend/.ebextensions/docker-compose.yml > SyncScribe/docker-compose.yml
+
+Then run from root: docker-compose up --build 
 ## Contributing
 
 We welcome contributions from the open-source community to enhance Sync Scribe and make it even better. If you have ideas for new features, improvements, or bug fixes, please follow these steps:

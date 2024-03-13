@@ -10,6 +10,9 @@ COPY package*.json ./
 # Install the frontend dependencies
 RUN npm install
 
+# Install react-scripts globally
+RUN npm install -g react-scripts
+
 # Copy the frontend source code to the container
 COPY . .
 
