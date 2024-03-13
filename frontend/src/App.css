@@ -1,18 +1,41 @@
 .App {
-  text-align: center;
+  display: flex;
+  height: 100vh;
+  font-family: 'HK Grotesk', sans-serif;
+  background-color: #f1efe6;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.sidebar {
+  width: 250px;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.right-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex: 1;
 }
 
-.App-link {
-  color: #61dafb;
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #f1efe6;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.app-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
 }
