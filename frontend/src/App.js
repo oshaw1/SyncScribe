@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NoteList from './components/NoteList';
+import Sidebar from './components/Sidebar';
+import NoteContent from './components/NoteContent';
+import logo from './images/SS.png';
 import './App.css';
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
+  const [selectedNote, setSelectedNote] = useState(null);
+  const [folders, setFolders] = useState([]);
 
   useEffect(() => {
     fetchNotes();
+    fetchFolders();
   }, []);
 
   const fetchNotes = async () => {
@@ -16,32 +20,40 @@ const App = () => {
     setNotes(response.data);
   };
 
-  const handleInputChange = (event) => {
-    setNewNote(event.target.value);
+  const fetchFolders = async () => {
+    const response = await axios.get('/api/folders');
+    setFolders(response.data);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    await axios.post('/api/notes', { content: newNote });
-    setNewNote('');
-    fetchNotes();
+  const handleNoteClick = (noteId) => {
+    const note = notes.find((note) => note.id === noteId);
+    setSelectedNote(note);
+  };
+
+  const handleFolderClick = (folderId) => {
+    // Implement the logic to handle folder click if needed
+    console.log('Folder clicked:', folderId);
   };
 
   return (
-    <div>
-      <h1>Sync Scribe</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter a new note"
-          value={newNote}
-          onChange={handleInputChange}
-        />
-        <button type="submit">Add Note</button>
-      </form>
-      <NoteList notes={notes} />
+    <div className="App">
+      <Sidebar
+        folders={folders}
+        onFolderClick={handleFolderClick}
+        onNoteClick={handleNoteClick}
+      />
+      <div className="right-container">
+        <div className="header">
+          <img src={logo} alt="SyncScribe Logo" className="logo" />
+          <span className="app-name">Sync Scribe</span>
+        </div>
+        <div className="main-content">
+          <NoteContent note={selectedNote} />
+        </div>
+      </div>
     </div>
   );
 };
+
 
 export default App;
