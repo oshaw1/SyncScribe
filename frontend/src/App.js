@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import LoginModal from './components/LoginModal';
 import Sidebar from './components/Sidebar';
 import NoteContent from './components/NoteContent';
 import logo from './images/SS.png';
@@ -9,6 +10,12 @@ const App = () => {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
   const [folders, setFolders] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // Perform login logic and update the isLoggedIn state
+    setIsLoggedIn(true);
+  };
 
   useEffect(() => {
     fetchNotes();
@@ -37,6 +44,7 @@ const App = () => {
 
   return (
     <div className="App">
+      {!isLoggedIn && <LoginModal onLogin={handleLogin} />}
       <Sidebar
         folders={folders}
         onFolderClick={handleFolderClick}
