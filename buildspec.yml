@@ -7,12 +7,10 @@ phases:
       nodejs: 18
     commands:
       - pip install yq
-  pre_build:
-    commands:
+    pre_build:
+      commands:
       - echo "Logging in to Amazon ECR..."
-      - ACCOUNT_ID=$(yq .aws.account_id aws-config.yml)
-      - REGION=$(yq .aws.region aws-config.yml)
-      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
       - echo "Building Go backend..."
@@ -34,10 +32,11 @@ phases:
   post_build:
     commands:
       - echo "Pushing Docker images to Amazon ECR..."
-      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-backend:latest
-      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-frontend:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-backend:latest
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-frontend:latest
       - echo "Deploying to Elastic Beanstalk..."
-      - aws elasticbeanstalk update-environment --environment-name YOUR_ENVIRONMENT_NAME --version-label sync-scribe-$(date +%Y-%m-%d)
+      - aws elasticbeanstalk update-environment --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label sync-scribe-$(date +%Y-%m-%d)
+
 
 artifacts:
   files:
