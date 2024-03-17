@@ -8,7 +8,7 @@ phases:
     commands:
       - pip install yq
     pre_build:
-      commands:
+    commands:
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
@@ -27,8 +27,8 @@ phases:
       - docker build -t syncscribe-frontend .
       - cd ..
       - echo "Tagging Docker images..."
-      - docker tag syncscribe-backend:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-backend:latest
-      - docker tag syncscribe-frontend:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-frontend:latest
+      - docker tag syncscribe-backend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-backend:latest
+      - docker tag syncscribe-frontend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-frontend:latest
   post_build:
     commands:
       - echo "Pushing Docker images to Amazon ECR..."
