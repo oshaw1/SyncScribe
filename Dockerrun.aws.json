@@ -1,0 +1,15 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "backend",
+        "image": "369270954008.dkr.ecr.eu-north-1.amazonaws.com/syncscribe-backend:latest",
+        "essential": true
+      },
+      {
+        "name": "frontend",
+        "image": "369270954008.dkr.ecr.eu-north-1.amazonaws.com/syncscribe-frontend:latest",
+        "essential": true
+      }
+    ]
+  }

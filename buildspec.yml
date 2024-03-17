@@ -3,7 +3,8 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 20
+      golang: 1.x
+      nodejs: 14.x
     commands:
       - pip install yq
   pre_build:
@@ -14,9 +15,19 @@ phases:
       - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
   build:
     commands:
-      - echo "Building Docker images..."
-      - docker build -t syncscribe-backend backend/
-      - docker build -t syncscribe-frontend frontend/
+      - echo "Building Go backend..."
+      - cd backend
+      - go build -o main
+      - echo "Building Docker image for backend..."
+      - docker build -t syncscribe-backend .
+      - cd ..
+      - echo "Building React frontend..."
+      - cd frontend
+      - npm install
+      - npm run build
+      - echo "Building Docker image for frontend..."
+      - docker build -t syncscribe-frontend .
+      - cd ..
       - echo "Tagging Docker images..."
       - docker tag syncscribe-backend:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-backend:latest
       - docker tag syncscribe-frontend:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-frontend:latest
@@ -25,10 +36,12 @@ phases:
       - echo "Pushing Docker images to Amazon ECR..."
       - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-backend:latest
       - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/syncscribe-frontend:latest
+      - echo "Deploying to Elastic Beanstalk..."
+      - aws elasticbeanstalk update-environment --environment-name YOUR_ENVIRONMENT_NAME --version-label sync-scribe-$(date +%Y-%m-%d)
 
 artifacts:
   files:
-    - docker-compose.yml
+    - Dockerrun.aws.json
     - backend/Dockerfile
     - frontend/Dockerfile
   name: sync-scribe-$(date +%Y-%m-%d)
