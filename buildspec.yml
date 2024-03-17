@@ -6,36 +6,29 @@ phases:
       golang: 1.20
       nodejs: 18
     commands:
-      - pip install yq
-    pre_build:
-    commands:
-      - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-  build:
-    commands:
       - echo "Building Go backend..."
       - cd backend
       - go build -o main
-      - echo "Building Docker image for backend..."
-      - docker build -t syncscribe-backend .
+      - echo "Packaging backend artifacts..."
+      - zip ../backend-artifact.zip main
       - cd ..
       - echo "Building React frontend..."
       - cd frontend
       - npm install
       - npm run build
-      - echo "Building Docker image for frontend..."
-      - docker build -t syncscribe-frontend .
-      - cd ..
-      - echo "Tagging Docker images..."
-      - docker tag syncscribe-backend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-backend:latest
-      - docker tag syncscribe-frontend:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-frontend:latest
+      - echo "Packaging frontend artifacts..."
+      - cd build
+      - zip -r ../../frontend-artifact.zip *
+      - cd ../..
   post_build:
     commands:
-      - echo "Pushing Docker images to Amazon ECR..."
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-backend:latest
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/syncscribe-frontend:latest
       - echo "Deploying to Elastic Beanstalk..."
-      - aws elasticbeanstalk update-environment --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label sync-scribe-$(date +%Y-%m-%d)
+      - aws elasticbeanstalk update-environment --environment-name $ELASTIC_BEANSTALK_ENV_NAME --version-label "$(date +%Y-%m-%d-%H-%M-%S)"
+
+artifacts:
+  files:
+    - backend-artifact.zip
+    - frontend-artifact.zip
 
 
 artifacts:
