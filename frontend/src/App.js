@@ -3,6 +3,8 @@ import axios from 'axios';
 import LoginModal from './components/LoginModal';
 import Sidebar from './components/Sidebar';
 import NoteContent from './components/NoteContent';
+import Footer from './components/Footer';
+import RightSidebar from './components/RightSidebar';
 import logo from './images/SS.png';
 import './App.css';
 
@@ -45,12 +47,8 @@ const App = () => {
   return (
     <div className="App">
       {!isLoggedIn && <LoginModal onLogin={handleLogin} />}
-      <Sidebar
-        folders={folders}
-        onFolderClick={handleFolderClick}
-        onNoteClick={handleNoteClick}
-      />
-      <div className="right-container">
+      <Sidebar folders={folders} onFolderClick={handleFolderClick} onNoteClick={handleNoteClick} />
+      <div className="main-container">
         <div className="header">
           <img src={logo} alt="SyncScribe Logo" className="logo" />
           <span className="app-name">Sync Scribe</span>
@@ -58,7 +56,9 @@ const App = () => {
         <div className="main-content">
           <NoteContent note={selectedNote} />
         </div>
+        <Footer />
       </div>
+      <RightSidebar />
     </div>
   );
 };
