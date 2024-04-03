@@ -4,12 +4,16 @@ import FolderList from './FolderList';
 const Sidebar = ({ folders, onFolderClick, onNoteClick }) => {
   return (
     <div className="sidebar">
-      <h2>Account</h2>
-      <FolderList
+      <div className="account">
+        <h2>Account</h2>
+      </div>
+      <div className="padding-div"></div>
+      <div className="folder-housing">
+        <FolderList
         folders={folders}
         onFolderClick={onFolderClick}
         onNoteClick={onNoteClick}
-      />
+      /></div>
     </div>
   );
 };
