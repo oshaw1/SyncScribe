@@ -5,7 +5,7 @@ import Sidebar from './components/Sidebar';
 import NoteContent from './components/NoteContent';
 import Footer from './components/Footer';
 import RightSidebar from './components/RightSidebar';
-import logo from './images/SS.png';
+import Header from './components/Header';
 import './App.css';
 
 const App = () => {
@@ -49,10 +49,7 @@ const App = () => {
       {!isLoggedIn && <LoginModal onLogin={handleLogin} />}
       <Sidebar folders={folders} onFolderClick={handleFolderClick} onNoteClick={handleNoteClick} />
       <div className="main-container">
-        <div className="header">
-          <img src={logo} alt="SyncScribe Logo" className="logo" />
-          <span className="app-name">Sync Scribe</span>
-        </div>
+        <Header />
         <div className="main-content">
           <NoteContent note={selectedNote} />
         </div>
@@ -62,6 +59,5 @@ const App = () => {
     </div>
   );
 };
-
 
 export default App;
