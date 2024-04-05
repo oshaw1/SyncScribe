@@ -21,6 +21,7 @@ func main() {
 	// API endpoints
 	http.HandleFunc("/ping", handlers.HealthCheck)
 	http.HandleFunc("/users/create", handlers.CreateUser)
+	http.HandleFunc("/users/login", handlers.LoginUser)
 
 	// Connect to MongoDB
 	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")

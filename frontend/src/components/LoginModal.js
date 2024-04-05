@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
 import './LoginModal.css';
 import loginlogo from '.././images/SS.png';
+import axios from 'axios';
 
 const LoginModal = ({ onLogin, onCreateAccount  }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Perform login logic here
-    onLogin();
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/users/login', { username, password });
+      if (response.data.message === 'Login successful') {
+        onLogin();
+      } else {
+        alert('Invalid credentials. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      if (error.response) {
+        //falls out of the range of 2xx
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+        console.error('Response headers:', error.response.headers);
+      } else if (error.request) {
+        //no response was received
+        console.error('Request:', error.request);
+      } else {
+        // Something happened in setting up the request
+        console.error('Error:', error.message);
+      }
+      alert('An error occurred while logging in. Please try again.');
+    }
   };
 
   return (
