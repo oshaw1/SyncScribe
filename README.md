@@ -16,8 +16,8 @@ Sync Scribe is built using the following technologies:
 
 - Frontend: React
 - Backend: Go
-- Real-time Communication: WebSocket
-- Database: AWS DynamoDB
+- Real-time Communication: WebSocket, OT algorithm
+- Database: MongoDB
 - Deployment: AWS Elastic Beanstalk
 
 ## Getting Started
@@ -27,6 +27,10 @@ To start using Sync Scribe, simply visit our website at [https://syncscribe.com]
 To launch the app locally move backend/.ebextensions/docker-compose.yml > SyncScribe/docker-compose.yml
 
 Then run from root: docker-compose up --build 
+                    mongod --dbpath ./data/db
+
+
+You will need to setup and host a mongoDB server for local implementation
 ## Contributing
 
 We welcome contributions from the open-source community to enhance Sync Scribe and make it even better. If you have ideas for new features, improvements, or bug fixes, please follow these steps:

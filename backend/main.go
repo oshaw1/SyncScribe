@@ -6,58 +6,32 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/rs/cors"
+
 	"github.com/oshaw1/SyncScribe/backend/handlers"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-type User struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty"`
-	Username string             `bson:"username"`
-	Pin      string             `bson:"pin"`
-	Notes    []string           `bson:"notes"`
-	Allowed  []string           `bson:"allowed"`
-}
-
-type Note struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	NoteID    string             `bson:"noteID"`
-	CreatedAt string             `bson:"createdAt"`
-	Content   string             `bson:"content"`
-	Tags      []string           `bson:"tags"`
-	Title     string             `bson:"title"`
-	UpdatedAt string             `bson:"updatedAt"`
-	UserID    string             `bson:"userID"`
-	FolderID  string             `bson:"folderID"`
-}
-
-type Folder struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty"`
-	Name           string             `bson:"name"`
-	UserID         string             `bson:"userID"`
-	ParentFolderID string             `bson:"parentFolderID"`
-	ChildFolderIDs []string           `bson:"childFolderIDs"`
-	NoteIDs        []string           `bson:"noteIDs"`
-}
 
 func main() {
 	// Serve frontend files
 	frontend := http.FileServer(http.Dir("../frontend"))
 	http.Handle("/", frontend)
 
-	// API endpoint
-	http.HandleFunc("/api/notes", handlers.HandleNotes)
+	// API endpoints
 	http.HandleFunc("/ping", handlers.HealthCheck)
+	http.HandleFunc("/users/create", handlers.CreateUser)
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	// Connect to MongoDB
+	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(context.Background())
 
-	db := client.Database("notes_app")
+	// Get database and collections
+	db := client.Database("syncscribe")
 	usersCollection := db.Collection("users")
 	notesCollection := db.Collection("notes")
 	foldersCollection := db.Collection("folders")
@@ -65,9 +39,19 @@ func main() {
 	// Pass the MongoDB collections to the handlers
 	handlers.SetCollections(usersCollection, notesCollection, foldersCollection)
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type"},
+		AllowCredentials: true,
+	})
+	handler := c.Handler(http.DefaultServeMux)
+
+	// Start the server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Printf("Server listening on port %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, handler))
 }

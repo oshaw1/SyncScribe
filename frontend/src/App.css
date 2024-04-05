@@ -5,7 +5,6 @@
   background-color: #f1efe6;
   position: relative
 }
-
 .App::after {
   content: '';
   position: absolute;
@@ -41,14 +40,55 @@
 }
 
 .logo {
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 80px;
   margin-right: 10px;
 }
 
 .app-name {
   font-size: 24px;
   font-weight: bold;
+  margin-right: auto;
+  padding-right: 20px;
+}
+
+.create-note-button-container {
+  margin-left: 100px;
+}
+
+.create-note-button {
+  background-color: #f1efe6;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.create-note-button:hover {
+  background-color: #fff;
+}
+
+.create-note-button:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  .create-note-button {
+    min-width: 120px;
+    padding: 0 25px;
+  }
 }
 
 .main-content {
@@ -62,11 +102,12 @@
 }
 
 .account{
-  background-color: #f5f4f0;
+  background-color: #f1efe6;
   border-style: solid;
   border-color: #e1dfd9;
-  border-radius: 25px;
-  border-width: 5px;
+  border-top: 5px;
+  border-left: 5px;
+  border-bottom: 5px;
   height: 6%;
   align-content: center;
   text-align: center;
@@ -74,6 +115,54 @@
   display: flex;
 }
 
+.account-button {
+  outline: none;
+  cursor: pointer;
+  border: none;
+  padding: 0.9rem 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.05rem;
+  font-weight: 700;
+  font-size: 17px;
+  border-radius: 500px;
+  color: #000;
+  background: #f1efe6;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.account-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: #f0ebd8da;
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.account-button:hover::before {
+  width: 100%;
+}
+
+.account-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.account-button span {
+  display: inline-block;
+  vertical-align: middle;
+}
 .padding-div{
   height: 1.5%;
   background-color: #f1efe6
@@ -102,4 +191,7 @@
 .footer {
   height: 7.5%;
   background-color: #f1efe6;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
 }

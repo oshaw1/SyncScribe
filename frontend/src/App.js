@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LoginModal from './components/LoginModal';
+import CreateAccountModal from './components/CreateAccountModal';
 import Sidebar from './components/Sidebar';
 import NoteContent from './components/NoteContent';
 import Footer from './components/Footer';
 import RightSidebar from './components/RightSidebar';
-import logo from './images/SS.png';
+import Header from './components/Header';
 import './App.css';
 
 const App = () => {
@@ -13,10 +14,30 @@ const App = () => {
   const [selectedNote, setSelectedNote] = useState(null);
   const [folders, setFolders] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
 
   const handleLogin = () => {
-    // Perform login logic and update the isLoggedIn state
     setIsLoggedIn(true);
+  };
+
+  const handleCreateAccount = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleCreateAccountSuccess = (username, password) => {
+    // Reset the create account modal state
+    setShowCreateAccountModal(false);
+
+    // Show the login modal again
+    setIsLoggedIn(false);
+  };
+
+  const handleOpenCreateAccountModal = () => {
+    setShowCreateAccountModal(true);
+  };
+
+  const handleCloseCreateAccountModal = () => {
+    setShowCreateAccountModal(false);
   };
 
   useEffect(() => {
@@ -46,13 +67,20 @@ const App = () => {
 
   return (
     <div className="App">
-      {!isLoggedIn && <LoginModal onLogin={handleLogin} />}
+      {!isLoggedIn && (
+        <>
+          <LoginModal onLogin={handleLogin} onCreateAccount={handleOpenCreateAccountModal} />
+          {showCreateAccountModal && (
+            <CreateAccountModal
+              onClose={handleCloseCreateAccountModal}
+              onCreateSuccess={handleCreateAccountSuccess}
+            />
+          )}
+        </>
+      )}
       <Sidebar folders={folders} onFolderClick={handleFolderClick} onNoteClick={handleNoteClick} />
       <div className="main-container">
-        <div className="header">
-          <img src={logo} alt="SyncScribe Logo" className="logo" />
-          <span className="app-name">Sync Scribe</span>
-        </div>
+        <Header />
         <div className="main-content">
           <NoteContent note={selectedNote} />
         </div>
@@ -62,6 +90,5 @@ const App = () => {
     </div>
   );
 };
-
 
 export default App;

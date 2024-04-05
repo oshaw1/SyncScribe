@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './LoginModal.css';
 import loginlogo from '.././images/SS.png';
 
-const LoginModal = ({ onLogin }) => {
+const LoginModal = ({ onLogin, onCreateAccount  }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -28,6 +28,8 @@ const LoginModal = ({ onLogin }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
+        <br></br>
+        <p>or <a href="#" onClick={onCreateAccount}>create an account</a></p>
       </div>
     </div>
   );

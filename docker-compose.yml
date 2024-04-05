@@ -1,11 +1,29 @@
 version: '3'
 services:
+  mongodb:
+    build:
+      context: ./data
+      dockerfile: Dockerfile
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - backend
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+    networks:
+      - backend
+
   frontend:
     build:
       context: ./frontend
@@ -14,3 +32,6 @@ services:
       - "80:80"
     depends_on:
       - backend
+
+networks:
+  backend:
