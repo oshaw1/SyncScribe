@@ -16,13 +16,12 @@ type User struct {
 // Note represents the note model
 type Note struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	NoteID    string             `bson:"noteID"`
 	CreatedAt string             `bson:"createdAt"`
 	Content   string             `bson:"content"`
 	Tags      []string           `bson:"tags"`
 	Title     string             `bson:"title"`
 	UpdatedAt string             `bson:"updatedAt"`
-	UserID    string             `bson:"userID"`
+	UserID    []string           `bson:"userID"`
 	FolderID  string             `bson:"folderID"`
 }
 
@@ -30,7 +29,7 @@ type Note struct {
 type Folder struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty"`
 	Name           string             `bson:"name"`
-	UserID         string             `bson:"userID"`
+	UserID         []string           `bson:"userID"`
 	ParentFolderID string             `bson:"parentFolderID"`
 	ChildFolderIDs []string           `bson:"childFolderIDs"`
 	NoteIDs        []string           `bson:"noteIDs"`

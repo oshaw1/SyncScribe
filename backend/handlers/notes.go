@@ -60,52 +60,55 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
-
 	err := json.NewDecoder(r.Body).Decode(&loginData)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		log.Printf("Error decoding login data: %v", err)
+		sendErrorResponse(w, http.StatusBadRequest, "Error decoding login data", err)
 		return
 	}
 
-	var user models.User
-	filter := bson.M{"username": loginData.Username, "password": loginData.Password}
-	err = usersCollection.FindOne(context.Background(), filter).Decode(&user)
+	user, err := findUserByCredentials(loginData.Username, loginData.Password)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			response := map[string]string{"message": "Invalid credentials"}
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusUnauthorized)
-			err = json.NewEncoder(w).Encode(response)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				log.Printf("Error encoding response: %v", err)
-			}
-			return
+			sendErrorResponse(w, http.StatusUnauthorized, "Invalid credentials", nil)
+		} else {
+			sendErrorResponse(w, http.StatusInternalServerError, "Error finding user", err)
 		}
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		log.Printf("Error finding user: %v", err)
 		return
 	}
 
 	if !user.Allowed {
-		response := map[string]string{"message": "Access denied"}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusForbidden)
-		err = json.NewEncoder(w).Encode(response)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Printf("Error encoding response: %v", err)
-		}
+		sendErrorResponse(w, http.StatusForbidden, "Access denied", nil)
 		return
 	}
 
-	response := map[string]string{"message": "Login successful"}
+	sendSuccessResponse(w, "Login successful")
+}
+
+func findUserByCredentials(username, password string) (models.User, error) {
+	var user models.User
+	filter := bson.M{"username": username, "password": password}
+	err := usersCollection.FindOne(context.Background(), filter).Decode(&user)
+	return user, err
+}
+
+func sendErrorResponse(w http.ResponseWriter, statusCode int, message string, err error) {
+	response := map[string]string{"message": message}
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
+	w.WriteHeader(statusCode)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Printf("Error encoding response: %v", err)
-		return
+	}
+	if err != nil {
+		log.Printf("Error: %v", err)
+	}
+}
+
+func sendSuccessResponse(w http.ResponseWriter, message string) {
+	response := map[string]string{"message": message}
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("Error encoding response: %v", err)
 	}
 }

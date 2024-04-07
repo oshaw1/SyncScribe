@@ -25,7 +25,7 @@ const CreateAccountModal = ({ onClose, onCreateSuccess }) => {
   };
 
   return (
-    <div className="login-modal">
+    <div className="create-account-modal">
       <div className="login-form">
         <img src={loginlogo} alt="SyncScribe Logo" className="logo" />
         <h2>Create Account</h2>
