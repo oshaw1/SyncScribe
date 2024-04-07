@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/rs/cors"
-
 	"github.com/oshaw1/SyncScribe/backend/handlers"
+	"github.com/oshaw1/SyncScribe/backend/handlers/user"
+	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -20,8 +20,8 @@ func main() {
 
 	// API endpoints
 	http.HandleFunc("/ping", handlers.HealthCheck)
-	http.HandleFunc("/users/create", handlers.CreateUser)
-	http.HandleFunc("/users/login", handlers.LoginUser)
+	http.HandleFunc("/users/create", user.CreateUser)
+	http.HandleFunc("/users/login", user.LoginUser)
 
 	// Connect to MongoDB
 	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
@@ -34,11 +34,11 @@ func main() {
 	// Get database and collections
 	db := client.Database("syncscribe")
 	usersCollection := db.Collection("users")
-	notesCollection := db.Collection("notes")
-	foldersCollection := db.Collection("folders")
+	//notesCollection := db.Collection("notes")
+	//foldersCollection := db.Collection("folders")
 
 	// Pass the MongoDB collections to the handlers
-	handlers.SetCollections(usersCollection, notesCollection, foldersCollection)
+	handlers.SetCollections(usersCollection, nil, nil)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost"},
