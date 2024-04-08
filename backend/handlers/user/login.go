@@ -3,14 +3,19 @@ package user
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/oshaw1/SyncScribe/backend/handlers"
 	"github.com/oshaw1/SyncScribe/backend/handlers/response"
 	"github.com/oshaw1/SyncScribe/backend/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
+
+var JWTSecret = []byte("9jlvzXsJzf+QuNSlqTHrAZ1FaAbGVEMyqqaCeHkoKwg=")
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
 	var loginData struct {
@@ -34,11 +39,18 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !user.Allowed {
+		fmt.Println("Access denied for user:", user.Username)
 		response.SendErrorResponse(w, http.StatusForbidden, "Access denied", nil)
 		return
 	}
 
-	response.SendSuccessResponse(w, "Login successful")
+	token, err := GenerateJWTToken(user.ID.Hex())
+	if err != nil {
+		response.SendErrorResponse(w, http.StatusInternalServerError, "Error generating token", err)
+		return
+	}
+
+	response.SendSuccessResponse(w, "Login successful", map[string]interface{}{"token": token})
 }
 
 func findUserByCredentials(username, password string) (models.User, error) {
@@ -46,4 +58,12 @@ func findUserByCredentials(username, password string) (models.User, error) {
 	filter := bson.M{"username": username, "password": password}
 	err := handlers.GetUsersCollection().FindOne(context.Background(), filter).Decode(&user)
 	return user, err
+}
+
+func GenerateJWTToken(userID string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"userID": userID,
+		"exp":    time.Now().Add(time.Hour * 24).Unix(), // Token expiration time (e.g., 24 hours)
+	})
+	return token.SignedString(JWTSecret)
 }

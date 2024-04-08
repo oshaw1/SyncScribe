@@ -22,6 +22,7 @@ func main() {
 	http.HandleFunc("/ping", handlers.HealthCheck)
 	http.HandleFunc("/users/create", user.CreateUser)
 	http.HandleFunc("/users/login", user.LoginUser)
+	http.HandleFunc("/users/delete", user.DeleteUser)
 
 	// Connect to MongoDB
 	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")

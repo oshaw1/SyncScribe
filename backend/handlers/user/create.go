@@ -42,5 +42,5 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID := result.InsertedID.(primitive.ObjectID).Hex()
-	response.SendSuccessResponse(w, "User created successfully", map[string]string{"userID": userID})
+	response.SendSuccessResponse(w, "User created successfully", map[string]interface{}{"userID": userID})
 }

@@ -7,7 +7,9 @@ import (
 )
 
 func SendErrorResponse(w http.ResponseWriter, statusCode int, message string, err error) {
-	response := map[string]string{"message": message}
+	response := map[string]interface{}{
+		"message": message,
+	}
 	if err != nil {
 		response["error"] = err.Error()
 	}
