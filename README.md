@@ -31,11 +31,6 @@ Then run from root: docker-compose up --build
 
 
 You will need to setup and host a mongoDB server for local implementation
-## Contributing
-
-We welcome contributions from the open-source community to enhance Sync Scribe and make it even better. If you have ideas for new features, improvements, or bug fixes, please follow these steps:
-
-Contributions are currently closed
 
 ## Roadmap
 
