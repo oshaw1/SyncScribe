@@ -9,9 +9,10 @@ import (
 	"testing"
 	"time"
 
+	"SyncScribe/backend/handlers/user"
+	"SyncScribe/backend/models"
+
 	"github.com/dgrijalva/jwt-go"
-	"github.com/oshaw1/SyncScribe/backend/handlers/user"
-	"github.com/oshaw1/SyncScribe/backend/models"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

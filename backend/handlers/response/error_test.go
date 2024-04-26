@@ -6,7 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/oshaw1/SyncScribe/backend/handlers/response"
+	"SyncScribe/backend/handlers/response"
+
 	"github.com/stretchr/testify/assert"
 )
 

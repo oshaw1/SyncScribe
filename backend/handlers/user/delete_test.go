@@ -7,8 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/oshaw1/SyncScribe/backend/handlers/user"
-	"github.com/oshaw1/SyncScribe/backend/models"
+	"SyncScribe/backend/handlers/user"
+	"SyncScribe/backend/models"
+
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -1,4 +1,4 @@
-module github.com/oshaw1/SyncScribe/backend
+module SyncScribe/backend
 
 go 1.20
 

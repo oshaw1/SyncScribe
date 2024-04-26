@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/oshaw1/SyncScribe/backend/handlers"
-	"github.com/oshaw1/SyncScribe/backend/handlers/response"
-	"github.com/oshaw1/SyncScribe/backend/models"
+	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/response"
+	"SyncScribe/backend/models"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )

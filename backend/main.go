@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/oshaw1/SyncScribe/backend/handlers"
-	"github.com/oshaw1/SyncScribe/backend/handlers/user"
+	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/user"
+
 	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

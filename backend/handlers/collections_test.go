@@ -3,7 +3,8 @@ package handlers_test
 import (
 	"testing"
 
-	"github.com/oshaw1/SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers"
+
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/mongo"
 )

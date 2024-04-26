@@ -7,10 +7,11 @@ import (
 	"net/http"
 	"time"
 
+	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/response"
+	"SyncScribe/backend/models"
+
 	"github.com/dgrijalva/jwt-go"
-	"github.com/oshaw1/SyncScribe/backend/handlers"
-	"github.com/oshaw1/SyncScribe/backend/handlers/response"
-	"github.com/oshaw1/SyncScribe/backend/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )

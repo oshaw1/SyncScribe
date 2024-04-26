@@ -6,9 +6,10 @@ import (
 	"net/http"
 	"strings"
 
+	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/response"
+
 	"github.com/dgrijalva/jwt-go"
-	"github.com/oshaw1/SyncScribe/backend/handlers"
-	"github.com/oshaw1/SyncScribe/backend/handlers/response"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

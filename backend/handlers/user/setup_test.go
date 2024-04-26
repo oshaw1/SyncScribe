@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/oshaw1/SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
