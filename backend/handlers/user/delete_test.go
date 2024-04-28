@@ -10,6 +10,7 @@ import (
 	"SyncScribe/backend/handlers/user"
 	"SyncScribe/backend/models"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -42,15 +43,15 @@ func TestDeleteUser(t *testing.T) {
 	handler := http.HandlerFunc(user.DeleteUser)
 	handler.ServeHTTP(rr, req)
 
-	require.Equal(t, http.StatusOK, rr.Code)
+	assert.Equal(t, http.StatusOK, rr.Code)
 
 	var response map[string]string
 	err = json.Unmarshal(rr.Body.Bytes(), &response)
 	require.NoError(t, err)
-	require.Equal(t, "User deleted successfully", response["message"])
+	assert.Equal(t, "User deleted successfully", response["message"])
 
 	// Check that the user is deleted from the database
 	var deletedUser models.User
 	err = usersCollection.FindOne(context.Background(), primitive.M{"_id": testUser.ID}).Decode(&deletedUser)
-	require.Equal(t, mongo.ErrNoDocuments, err)
+	assert.Equal(t, mongo.ErrNoDocuments, err)
 }

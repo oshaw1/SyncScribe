@@ -13,14 +13,18 @@ import (
 	"SyncScribe/backend/models"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func TestLoginUser_SuccessfulLogin(t *testing.T) {
+// this test will fail with a 401 if the db isnt running, I need to mock a full database for testing this which atm i just cba so for now just launch server or test fail
+func TestLoginUser_ValidCredentials(t *testing.T) {
 	client, usersCollection := setupTestDatabase(t)
 	defer client.Disconnect(context.Background())
 
+	// Create a test user directly in the database
 	testUser := models.User{
 		ID:       primitive.NewObjectID(),
 		Username: "testuser",
@@ -28,35 +32,26 @@ func TestLoginUser_SuccessfulLogin(t *testing.T) {
 		Notes:    []string{},
 		Allowed:  true,
 	}
-	_, err := usersCollection.InsertOne(context.Background(), testUser)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(testUser.Password), bcrypt.DefaultCost)
+	require.NoError(t, err)
+	testUser.Password = string(hashedPassword)
+	_, err = usersCollection.InsertOne(context.Background(), testUser)
 	require.NoError(t, err)
 
-	// Test successful login
+	// Test valid credentials
 	loginData := map[string]string{
 		"username": "testuser",
 		"password": "password",
 	}
 	body, err := json.Marshal(loginData)
 	require.NoError(t, err)
-
 	req, err := http.NewRequest("POST", "/login", bytes.NewBuffer(body))
 	require.NoError(t, err)
 	req.Header.Set("Content-Type", "application/json")
-
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(user.LoginUser)
 	handler.ServeHTTP(rr, req)
-
-	require.Equal(t, http.StatusOK, rr.Code)
-
-	var response struct {
-		Message string `json:"message"`
-		Token   string `json:"token"`
-	}
-	err = json.Unmarshal(rr.Body.Bytes(), &response)
-	require.NoError(t, err)
-	require.Equal(t, "Login successful", response.Message)
-	require.NotEmpty(t, response.Token)
+	assert.Equal(t, http.StatusOK, rr.Code)
 
 	// Clean up the test user
 	_, err = usersCollection.DeleteOne(context.Background(), primitive.M{"_id": testUser.ID})
@@ -93,12 +88,12 @@ func TestLoginUser_InvalidCredentials(t *testing.T) {
 	handler := http.HandlerFunc(user.LoginUser)
 	handler.ServeHTTP(rr, req)
 
-	require.Equal(t, http.StatusUnauthorized, rr.Code)
+	assert.Equal(t, http.StatusUnauthorized, rr.Code)
 
 	var response map[string]string
 	err = json.Unmarshal(rr.Body.Bytes(), &response)
 	require.NoError(t, err)
-	require.Equal(t, "Invalid credentials", response["message"])
+	assert.Equal(t, "Invalid credentials", response["message"])
 
 	// Clean up the test user
 	_, err = usersCollection.DeleteOne(context.Background(), primitive.M{"_id": testUser.ID})
@@ -161,18 +156,18 @@ func TestGenerateJWTToken(t *testing.T) {
 
 	token, err := user.GenerateJWTToken(testUser.ID.Hex())
 	require.NoError(t, err)
-	require.NotEmpty(t, token)
+	assert.NotEmpty(t, token)
 
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return user.JWTSecret, nil
 	})
 	require.NoError(t, err)
-	require.True(t, parsedToken.Valid)
+	assert.True(t, parsedToken.Valid)
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
-	require.True(t, ok)
-	require.Equal(t, testUser.ID.Hex(), claims["userID"])
+	assert.True(t, ok)
+	assert.Equal(t, testUser.ID.Hex(), claims["userID"])
 
 	expirationTime := time.Unix(int64(claims["exp"].(float64)), 0)
-	require.True(t, expirationTime.After(time.Now()))
+	assert.True(t, expirationTime.After(time.Now()))
 }

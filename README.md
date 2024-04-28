@@ -22,7 +22,7 @@ Sync Scribe is built using the following technologies:
 
 ## Getting Started
 
-To start using Sync Scribe, simply visit our website at [https://syncscribe.com](https://syncscribe.com) and create an account. Once you're logged in, you can begin creating, editing, and collaborating on notes instantly.
+To start using Sync Scribe, simply visit our website at TBC and create an account. Once you're logged in, you can begin creating, editing, and collaborating on notes instantly.
 
 To launch the app locally move backend/.ebextensions/docker-compose.yml > SyncScribe/docker-compose.yml
 
@@ -32,12 +32,6 @@ Then run from root: docker-compose up --build
 
 You will need to setup and host a mongoDB server for local implementation
 
-## Roadmap
-
-I have an exciting roadmap planned for Sync Scribe, with several features and enhancements in the pipeline:
-
-Stay tuned for updates and new releases as we continue to improve and expand Sync Scribe.
-
 ## License
 
 Sync Scribe is released under the [MIT License](LICENSE).
@@ -46,5 +40,7 @@ Sync Scribe is released under the [MIT License](LICENSE).
 
 - [React](https://reactjs.org/)
 - [Go](https://golang.org/)
-- [AWS DynamoDB](https://aws.amazon.com/dynamodb/)
-- [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/)
+
+## TODO
+
+- Add a logging framework, using fmt is clunky and gives information needlessly

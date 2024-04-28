@@ -1,19 +1,19 @@
 package user
 
 import (
+	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/response"
+	"SyncScribe/backend/models"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
 
-	"SyncScribe/backend/handlers"
-	"SyncScribe/backend/handlers/response"
-	"SyncScribe/backend/models"
-
 	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var JWTSecret = []byte("9jlvzXsJzf+QuNSlqTHrAZ1FaAbGVEMyqqaCeHkoKwg=")
@@ -56,9 +56,22 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 func findUserByCredentials(username, password string) (models.User, error) {
 	var user models.User
-	filter := bson.M{"username": username, "password": password}
+	filter := bson.M{"username": username}
 	err := handlers.GetUsersCollection().FindOne(context.Background(), filter).Decode(&user)
-	return user, err
+	if err != nil {
+		fmt.Printf("Error finding user: %v\n", err)
+		return user, err
+	}
+
+	fmt.Printf("Retrieved user: %+v\n", user)
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		fmt.Printf("Password comparison failed: %v\n", err)
+		return user, mongo.ErrNoDocuments
+	}
+
+	return user, nil
 }
 
 func GenerateJWTToken(userID string) (string, error) {
