@@ -15,21 +15,23 @@ const App = () => {
   const [folders, setFolders] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(true);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
+    setShowLoginModal(false);
   };
 
-  const handleCreateAccount = () => {
-    setIsLoggedIn(true);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setShowLoginModal(true);
   };
 
   const handleCreateAccountSuccess = (username, password) => {
     // Reset the create account modal state
     setShowCreateAccountModal(false);
-
-    // Show the login modal again
-    setIsLoggedIn(false);
+    // Show the login modal
+    setShowLoginModal(true);
   };
 
   const handleOpenCreateAccountModal = () => {
@@ -69,16 +71,13 @@ const App = () => {
     <div className="App">
       {!isLoggedIn && (
         <>
-          <LoginModal onLogin={handleLogin} onCreateAccount={handleOpenCreateAccountModal} />
+          {showLoginModal && <LoginModal onLogin={handleLogin} onCreateAccount={handleOpenCreateAccountModal} />}
           {showCreateAccountModal && (
-            <CreateAccountModal
-              onClose={handleCloseCreateAccountModal}
-              onCreateSuccess={handleCreateAccountSuccess}
-            />
+            <CreateAccountModal onClose={handleCloseCreateAccountModal} onCreateSuccess={handleCreateAccountSuccess} />
           )}
         </>
       )}
-      <Sidebar folders={folders} onFolderClick={handleFolderClick} onNoteClick={handleNoteClick} />
+      <Sidebar folders={folders} onFolderClick={handleFolderClick} onNoteClick={handleNoteClick} onLogout={handleLogout} />
       <div className="main-container">
         <Header />
         <div className="main-content">

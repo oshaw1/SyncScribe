@@ -19,7 +19,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// this test will fail with a 401 if the db isnt running, I need to mock a full database for testing this which atm i just cba so for now just launch server or test fail
+// this test will fail with a 401 if the db isnt running
 func TestLoginUser_ValidCredentials(t *testing.T) {
 	client, usersCollection := setupTestDatabase(t)
 	defer client.Disconnect(context.Background())

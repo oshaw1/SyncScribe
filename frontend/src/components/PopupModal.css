@@ -22,6 +22,18 @@
     align-items: center;
     z-index: 99999;
 }
+
+.account-settings-modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
   
   .login-form {
     background-color: #f1efe6;
@@ -57,4 +69,24 @@
     border-color: #e1dfd9;
     border-radius: 4px;
     cursor: pointer;
+  }
+  
+  .delete-button,
+  .confirm-delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .confirm-delete-button {
+    background-color: #c0392b;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    margin-bottom: 10px;
   }

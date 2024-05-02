@@ -25,7 +25,7 @@ func setupTestDatabase(t *testing.T) (*mongo.Client, *mongo.Collection) {
 		t.Fatalf("Error connecting to MongoDB: %v", err)
 	}
 
-	usersCollection := client.Database("users").Collection("users")
+	usersCollection := client.Database("Test").Collection("users")
 	handlers.SetCollections(usersCollection, nil, nil)
 
 	return client, usersCollection

@@ -36,11 +36,6 @@ You will need to setup and host a mongoDB server for local implementation
 
 Sync Scribe is released under the [MIT License](LICENSE).
 
-## Acknowledgements
-
-- [React](https://reactjs.org/)
-- [Go](https://golang.org/)
-
 ## TODO
 
-- Add a logging framework, using fmt is clunky and gives information needlessly
+- Add a logging framework

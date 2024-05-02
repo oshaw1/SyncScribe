@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './LoginModal.css';
+import './PopupModal.css';
 import loginlogo from '.././images/SS.png';
 
 const CreateAccountModal = ({ onClose, onCreateSuccess }) => {
