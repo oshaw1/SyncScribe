@@ -4,7 +4,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// User represents the user model
 type User struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty"`
 	Username string             `bson:"username"`
@@ -13,7 +12,6 @@ type User struct {
 	Allowed  bool               `bson:"allowed"`
 }
 
-// Note represents the note model
 type Note struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
 	CreatedAt string             `bson:"createdAt"`
@@ -25,7 +23,6 @@ type Note struct {
 	FolderID  string             `bson:"folderID"`
 }
 
-// Folder represents the folder model
 type Folder struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty"`
 	Name           string             `bson:"name"`

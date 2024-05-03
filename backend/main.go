@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/note"
 	"SyncScribe/backend/handlers/user"
 
 	"github.com/rs/cors"
@@ -21,11 +22,15 @@ func main() {
 
 	// API endpoints
 	http.HandleFunc("/ping", handlers.HealthCheck)
+
+	//user
 	http.HandleFunc("/users/create", user.CreateUser)
 	http.HandleFunc("/users/login", user.LoginUser)
 	http.HandleFunc("/users/delete", user.DeleteUser)
 
-	// Connect to MongoDB
+	//note
+	http.HandleFunc("/notes/create", note.CreateNote)
+
 	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
@@ -33,14 +38,12 @@ func main() {
 	}
 	defer client.Disconnect(context.Background())
 
-	// Get database and collections
 	db := client.Database("syncscribe")
 	usersCollection := db.Collection("users")
-	//notesCollection := db.Collection("notes")
-	//foldersCollection := db.Collection("folders")
+	notesCollection := db.Collection("notes")
+	foldersCollection := db.Collection("folders")
 
-	// Pass the MongoDB collections to the handlers
-	handlers.SetCollections(usersCollection, nil, nil)
+	handlers.SetCollections(usersCollection, notesCollection, foldersCollection)
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost"},
@@ -52,7 +55,6 @@ func main() {
 
 	handler := c.Handler(http.DefaultServeMux)
 
-	// Start the server
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
