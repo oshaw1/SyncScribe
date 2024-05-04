@@ -45,13 +45,16 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := GenerateJWTToken(user.ID.Hex())
+	token, err := GenerateJWTToken(user)
 	if err != nil {
 		response.SendErrorResponse(w, http.StatusInternalServerError, "Error generating token", err)
 		return
 	}
 
-	response.SendSuccessResponse(w, "Login successful", map[string]interface{}{"token": token})
+	response.SendSuccessResponse(w, "Login successful", map[string]interface{}{
+		"token":  token,
+		"userID": user.ID.Hex(),
+	})
 }
 
 func findUserByCredentials(username, password string) (models.User, error) {
@@ -74,10 +77,10 @@ func findUserByCredentials(username, password string) (models.User, error) {
 	return user, nil
 }
 
-func GenerateJWTToken(userID string) (string, error) {
+func GenerateJWTToken(user models.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userID": userID,
-		"exp":    time.Now().Add(time.Hour * 24).Unix(), // Token expiration time (e.g., 24 hours)
+		"userID": user.ID.Hex(),
+		"exp":    time.Now().Add(time.Hour * 2).Unix(),
 	})
 	return token.SignedString(JWTSecret)
 }

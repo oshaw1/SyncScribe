@@ -91,6 +91,41 @@
   }
 }
 
+.account-button {
+  background-color: #f1efe6;
+  border: 2px solid #422800;
+  align-items: center;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 50px;
+  text-align: center;
+  touch-action: manipulation;
+  padding: 0.9rem 2rem;
+  font-family: inherit;
+  font-size: inherit;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.05rem;
+  border-radius: 500px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.account-button:hover {
+  background-color: #fff;
+}
+
+.account-button:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
 .main-content {
   border-style: solid;
   border-radius: 25px;
@@ -113,27 +148,6 @@
   text-align: center;
   justify-content: center;
   display: flex;
-}
-
-.account-button {
-  outline: none;
-  cursor: pointer;
-  border: none;
-  padding: 0.9rem 2rem;
-  margin: 0;
-  font-family: inherit;
-  font-size: inherit;
-  display: inline-flex;
-  align-items: center;
-  letter-spacing: 0.05rem;
-  font-weight: 700;
-  font-size: 17px;
-  border-radius: 500px;
-  color: #000;
-  background: #f1efe6;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
 }
 
 .account-button::before {

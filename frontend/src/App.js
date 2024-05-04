@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import LoginModal from './components/LoginModal';
 import CreateAccountModal from './components/CreateAccountModal';
@@ -16,6 +16,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(true);
+  const [sidebarStructure, setSidebarStructure] = useState({});
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -28,9 +29,7 @@ const App = () => {
   };
 
   const handleCreateAccountSuccess = (username, password) => {
-    // Reset the create account modal state
     setShowCreateAccountModal(false);
-    // Show the login modal
     setShowLoginModal(true);
   };
 
@@ -42,24 +41,8 @@ const App = () => {
     setShowCreateAccountModal(false);
   };
 
-  useEffect(() => {
-    fetchNotes();
-    fetchFolders();
-  }, []);
-
-  const fetchNotes = async () => {
-    const response = await axios.get('/api/notes');
-    setNotes(response.data);
-  };
-
-  const fetchFolders = async () => {
-    const response = await axios.get('/api/folders');
-    setFolders(response.data);
-  };
-
   const handleNoteClick = (noteId) => {
-    const note = notes.find((note) => note.id === noteId);
-    setSelectedNote(note);
+    console.log('Note clicked:', noteId);
   };
 
   const handleFolderClick = (folderId) => {
@@ -71,13 +54,29 @@ const App = () => {
     <div className="App">
       {!isLoggedIn && (
         <>
-          {showLoginModal && <LoginModal onLogin={handleLogin} onCreateAccount={handleOpenCreateAccountModal} />}
+          {showLoginModal && (
+            <LoginModal
+              onLogin={handleLogin}
+              onCreateAccount={handleOpenCreateAccountModal}
+              setSidebarStructure={setSidebarStructure}
+            />
+          )}
           {showCreateAccountModal && (
-            <CreateAccountModal onClose={handleCloseCreateAccountModal} onCreateSuccess={handleCreateAccountSuccess} />
+            <CreateAccountModal
+              onClose={handleCloseCreateAccountModal}
+              onCreateSuccess={handleCreateAccountSuccess}
+            />
           )}
         </>
       )}
-      <Sidebar folders={folders} onFolderClick={handleFolderClick} onNoteClick={handleNoteClick} onLogout={handleLogout} />
+      <Sidebar
+        folders={folders}
+        onFolderClick={handleFolderClick}
+        onNoteClick={handleNoteClick}
+        onLogout={handleLogout}
+        sidebarStructure={sidebarStructure}
+        setSidebarStructure={setSidebarStructure}
+      />
       <div className="main-container">
         <Header />
         <div className="main-content">

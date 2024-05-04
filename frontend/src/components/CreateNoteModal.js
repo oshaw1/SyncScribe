@@ -4,17 +4,26 @@ import './PopupModal.css';
 
 const CreateNoteModal = ({ onClose, onCreateSuccess }) => {
   const [title, setTitle] = useState('');
-  const [content] = useState('');
+  const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [error, setError] = useState('');
 
   const handleCreateNote = async () => {
     try {
+      const token = localStorage.getItem('token');
+      const userID = localStorage.getItem('userID');
+  
       const response = await axios.post('http://localhost:8080/notes/create', {
         title,
         content,
         tags: tags.split(',').map((tag) => tag.trim()),
+        userID,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+  
       console.log('Note created successfully:', response.data);
       onCreateSuccess();
     } catch (error) {
@@ -34,6 +43,11 @@ const CreateNoteModal = ({ onClose, onCreateSuccess }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+        <textarea
+          placeholder="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
         <input
           type="text"
           placeholder="Tags (comma-separated)"

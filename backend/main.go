@@ -7,7 +7,9 @@ import (
 	"os"
 
 	"SyncScribe/backend/handlers"
+	"SyncScribe/backend/handlers/folder"
 	"SyncScribe/backend/handlers/note"
+	"SyncScribe/backend/handlers/sidebar"
 	"SyncScribe/backend/handlers/user"
 
 	"github.com/rs/cors"
@@ -22,6 +24,7 @@ func main() {
 
 	// API endpoints
 	http.HandleFunc("/ping", handlers.HealthCheck)
+	http.HandleFunc("/api/sidebar/build", sidebar.BuildSidebarStructure)
 
 	//user
 	http.HandleFunc("/users/create", user.CreateUser)
@@ -30,6 +33,11 @@ func main() {
 
 	//note
 	http.HandleFunc("/notes/create", note.CreateNote)
+	http.HandleFunc("/notes/getNotes", note.GetNotes)
+
+	//folder
+	http.HandleFunc("/folders/create", folder.CreateFolder)
+	http.HandleFunc("/folders/getFolders", folder.GetFolders)
 
 	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)

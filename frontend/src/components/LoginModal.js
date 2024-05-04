@@ -3,9 +3,29 @@ import './PopupModal.css';
 import loginlogo from '.././images/SS.png';
 import axios from 'axios';
 
-const LoginModal = ({ onLogin, onCreateAccount  }) => {
+const LoginModal = ({ onLogin, onCreateAccount, setSidebarStructure }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const fetchSidebarStructure = async (token, userID) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/sidebar/build',
+        {
+          userID,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('Sidebar structure:', response.data);
+      setSidebarStructure(response.data); // Update the sidebarStructure state in the parent component
+    } catch (error) {
+      console.error('Error fetching sidebar structure:', error);
+    }
+  };
 
   const handleLogin = async () => {
     try {
@@ -13,10 +33,13 @@ const LoginModal = ({ onLogin, onCreateAccount  }) => {
         username,
         password,
       });
-
       if (response.data.message === 'Login successful') {
-        // Store the token in local storage
+        // Store the token and user ID in local storage
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userID', response.data.userID);
+
+        fetchSidebarStructure(response.data.token, response.data.userID);
+
         onLogin();
       } else {
         alert('Invalid credentials. Please try again.');
@@ -40,24 +63,28 @@ const LoginModal = ({ onLogin, onCreateAccount  }) => {
   };
 
   return (
-    <div className="login-modal">
-      <div className="login-form">
-        <img src={loginlogo} alt="SyncScribe Logo" className="logo" />
-        <input
-          type="text"
-          placeholder="Please enter your Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Please enter your Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={handleLogin}>Login</button>
-        <br></br>
-        <p>or <a href="#" onClick={onCreateAccount}>create an account</a></p>
+    <div>
+      <div className="login-modal">
+        <div className="login-form">
+          <img src={loginlogo} alt="SyncScribe Logo" className="logo" />
+          <input
+            type="text"
+            placeholder="Please enter your Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Please enter your Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={handleLogin}>Login</button>
+          <br />
+          <p>
+            or <a href="#" onClick={onCreateAccount}>create an account</a>
+          </p>
+        </div>
       </div>
     </div>
   );
