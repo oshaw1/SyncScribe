@@ -34,6 +34,7 @@ func main() {
 	//note
 	http.HandleFunc("/notes/create", note.CreateNote)
 	http.HandleFunc("/notes/getNotes", note.GetNotes)
+	http.HandleFunc("/notes/getNote", note.GetNoteByID)
 
 	//folder
 	http.HandleFunc("/folders/create", folder.CreateFolder)

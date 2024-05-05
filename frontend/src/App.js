@@ -11,7 +11,7 @@ import './App.css';
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [selectedNote, setSelectedNote] = useState(null);
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
   const [folders, setFolders] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showCreateAccountModal, setShowCreateAccountModal] = useState(false);
@@ -43,6 +43,7 @@ const App = () => {
 
   const handleNoteClick = (noteId) => {
     console.log('Note clicked:', noteId);
+    setSelectedNoteId(noteId);
   };
 
   const handleFolderClick = (folderId) => {
@@ -80,7 +81,7 @@ const App = () => {
       <div className="main-container">
         <Header />
         <div className="main-content">
-          <NoteContent note={selectedNote} />
+          {selectedNoteId && <NoteContent noteId={selectedNoteId} />}
         </div>
         <Footer />
       </div>
