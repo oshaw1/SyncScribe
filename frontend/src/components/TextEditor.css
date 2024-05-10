@@ -1,0 +1,10 @@
+.editor-content .ProseMirror {
+    border: none;
+    outline: none;
+  }
+  
+  .editor-content .ProseMirror-focused {
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }

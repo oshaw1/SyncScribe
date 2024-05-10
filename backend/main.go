@@ -1,16 +1,15 @@
 package main
 
 import (
-	"context"
-	"log"
-	"net/http"
-	"os"
-
 	"SyncScribe/backend/handlers"
 	"SyncScribe/backend/handlers/folder"
 	"SyncScribe/backend/handlers/note"
 	"SyncScribe/backend/handlers/sidebar"
 	"SyncScribe/backend/handlers/user"
+	"context"
+	"log"
+	"net/http"
+	"os"
 
 	"github.com/rs/cors"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,19 +25,22 @@ func main() {
 	http.HandleFunc("/ping", handlers.HealthCheck)
 	http.HandleFunc("/api/sidebar/build", sidebar.BuildSidebarStructure)
 
-	//user
+	// User endpoints
 	http.HandleFunc("/users/create", user.CreateUser)
 	http.HandleFunc("/users/login", user.LoginUser)
 	http.HandleFunc("/users/delete", user.DeleteUser)
 
-	//note
+	// Note endpoints
 	http.HandleFunc("/notes/create", note.CreateNote)
 	http.HandleFunc("/notes/getNotes", note.GetNotes)
 	http.HandleFunc("/notes/getNote", note.GetNoteByID)
 
-	//folder
+	// Folder endpoints
 	http.HandleFunc("/folders/create", folder.CreateFolder)
 	http.HandleFunc("/folders/getFolders", folder.GetFolders)
+
+	// WebSocket endpoint
+	http.HandleFunc("/ws/", handlers.HandleWebSocket)
 
 	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -51,7 +53,6 @@ func main() {
 	usersCollection := db.Collection("users")
 	notesCollection := db.Collection("notes")
 	foldersCollection := db.Collection("folders")
-
 	handlers.SetCollections(usersCollection, notesCollection, foldersCollection)
 
 	c := cors.New(cors.Options{
@@ -63,7 +64,6 @@ func main() {
 	})
 
 	handler := c.Handler(http.DefaultServeMux)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"

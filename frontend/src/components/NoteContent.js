@@ -25,8 +25,12 @@ const NoteContent = ({ noteId }) => {
 
   return (
     <div>
-      <h2>{noteTitle}</h2>
-      <TextEditor content={noteContent} setContent={setNoteContent} />
+        <TextEditor
+        title={noteTitle}
+        setTitle={setNoteTitle}
+        content={noteContent}
+        setContent={setNoteContent}
+      />
     </div>
   );
 };
